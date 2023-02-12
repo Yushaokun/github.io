@@ -3,11 +3,11 @@
   <title>北溟鱼的博客</title>
   
   <subtitle>博客</subtitle>
-  <link href="https://yushaokun.github.io/github.io/atom.xml" rel="self"/>
+  <link href="https://yushaokun.github.io/atom.xml" rel="self"/>
   
-  <link href="https://yushaokun.github.io/github.io/"/>
+  <link href="https://yushaokun.github.io/"/>
   <updated>2023-02-12T08:32:42.964Z</updated>
-  <id>https://yushaokun.github.io/github.io/</id>
+  <id>https://yushaokun.github.io/</id>
   
   <author>
     <name>北溟鱼</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="https://yushaokun.github.io/github.io/2023/02/12/hello-world/"/>
-    <id>https://yushaokun.github.io/github.io/2023/02/12/hello-world/</id>
+    <link href="https://yushaokun.github.io/2023/02/12/hello-world/"/>
+    <id>https://yushaokun.github.io/2023/02/12/hello-world/</id>
     <published>2023-02-12T08:32:42.964Z</published>
     <updated>2023-02-12T08:32:42.964Z</updated>
     
