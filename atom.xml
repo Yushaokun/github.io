@@ -6,7 +6,7 @@
   <link href="https://yushaokun.github.io/atom.xml" rel="self"/>
   
   <link href="https://yushaokun.github.io/"/>
-  <updated>2023-02-12T14:54:07.001Z</updated>
+  <updated>2023-02-12T14:57:48.898Z</updated>
   <id>https://yushaokun.github.io/</id>
   
   <author>
@@ -21,14 +21,16 @@
     <link href="https://yushaokun.github.io/2023/02/12/Nginx%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%8C%87%E5%8D%97/"/>
     <id>https://yushaokun.github.io/2023/02/12/Nginx%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E6%8C%87%E5%8D%97/</id>
     <published>2023-02-12T14:14:38.000Z</published>
-    <updated>2023-02-12T14:54:07.001Z</updated>
+    <updated>2023-02-12T14:57:48.898Z</updated>
     
-    <content type="html"><![CDATA[<h1 id=""><a href="#" class="headerlink" title=" "></a> </h1><p><img src="https://pic3.zhimg.com/v2-58d652598269710fa67ec8d1c88d8f03_r.jpg?source=1940ef5c" alt=""></p><ul><li>培养一套学习方法 整理一套完善的体系</li><li>不要从main函数开始阅读</li><li><strong><em>./nginx -c conf/nginx.conf 带配置启动</em></strong></li><li>每个 ngx_command_t() 函数里面，都是一个配置关键字</li><li>阅读源码的工具： source_insight</li><li><strong><em>从conf入手</em></strong><ul><li>找到 worker process，在通过 worker process 设置conf全局变量；主进程启动之后，启动 worker_process</li></ul></li><li>进程开始的地方：ngx_process_cycle.c</li><li>worker process与server的关系：<ul><li>每个process都运行所有的server，process同时监听所有server</li><li>每个server各自对应一个listenfd，将所有listenfd都加入到 epoll_ctl()中</li><li>当多个进程监听同一个端口时，会出现 “惊群” 的问题<ul><li>什么是 “惊群”？<ul><li>多个进程监听同一个端口</li><li>使用TCP客户端连接主机端口，所有进程全被唤醒，但只有一个进程处理消息</li><li>高并发的情况下，进程始终处于 唤醒→挂起 的循环状态，性能大大降低</li></ul></li><li>如何解决“惊群”？<ul><li>进程之间协商出一种规则：某一时刻，只有一个线程监听端口</li><li>Nginx具体实现：ngx_event.c → ngx_process_events_and_timers</li><li>ngx_trylock_accept_mutex</li></ul></li></ul></li></ul></li><li>惊群是如何产生的？</li><li>惊群的影响是什么？</li><li>惊群解决的原理时什么？</li><li>解决惊群的具体实现？（谁有资格拿到CAS锁，谁有资格listen）</li><li>进程释放锁之后，无需通知</li><li>为何多个进程监听事件？为何使用多进程而不是使用多线程？</li><li>进程间资源隔离，使用进程更安全</li><li>请求与请求之间独立，使用多线程需要加锁，而多进程隔离程度更高</li><li>CAS Compare and Swap (乐观锁)</li><li>Nginx作为高性能服务器，日志如何存储？<ul><li>日志落盘，性能与磁盘性能相关</li></ul></li><li>Nginx 线程池<ul><li>什么是线程池？</li><li>线程池的原理</li><li>如何获取，并且返回给线程池？</li><li>动态伸缩</li><li>队列 异步写入 起到了解耦的作用</li><li>频繁的写入日志，可以采用线程池进行处理</li></ul></li><li>拿到一个配置文件 深入理解模块</li><li>conf文件 ngx.modules.c</li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id=""><a href="#" class="headerlink" title=" "></a> </h1><p><img src="/pic/nginx_icon.jpg" alt="images"></p><ul><li>培养一套学习方法 整理一套完善的体系</li><li>不要从main函数开始阅读</li><li><strong><em>./nginx -c conf/nginx.conf 带配置启动</em></strong></li><li>每个 ngx_command_t() 函数里面，都是一个配置关键字</li><li>阅读源码的工具： source_insight</li><li><strong><em>从conf入手</em></strong><ul><li>找到 worker process，在通过 worker process 设置conf全局变量；主进程启动之后，启动 worker_process</li></ul></li><li>进程开始的地方：ngx_process_cycle.c</li><li>worker process与server的关系：<ul><li>每个process都运行所有的server，process同时监听所有server</li><li>每个server各自对应一个listenfd，将所有listenfd都加入到 epoll_ctl()中</li><li>当多个进程监听同一个端口时，会出现 “惊群” 的问题<ul><li>什么是 “惊群”？<ul><li>多个进程监听同一个端口</li><li>使用TCP客户端连接主机端口，所有进程全被唤醒，但只有一个进程处理消息</li><li>高并发的情况下，进程始终处于 唤醒→挂起 的循环状态，性能大大降低</li></ul></li><li>如何解决“惊群”？<ul><li>进程之间协商出一种规则：某一时刻，只有一个线程监听端口</li><li>Nginx具体实现：ngx_event.c → ngx_process_events_and_timers</li><li>ngx_trylock_accept_mutex</li></ul></li></ul></li></ul></li><li>惊群是如何产生的？</li><li>惊群的影响是什么？</li><li>惊群解决的原理时什么？</li><li>解决惊群的具体实现？（谁有资格拿到CAS锁，谁有资格listen）</li><li>进程释放锁之后，无需通知</li><li>为何多个进程监听事件？为何使用多进程而不是使用多线程？</li><li>进程间资源隔离，使用进程更安全</li><li>请求与请求之间独立，使用多线程需要加锁，而多进程隔离程度更高</li><li>CAS Compare and Swap (乐观锁)</li><li>Nginx作为高性能服务器，日志如何存储？<ul><li>日志落盘，性能与磁盘性能相关</li></ul></li><li>Nginx 线程池<ul><li>什么是线程池？</li><li>线程池的原理</li><li>如何获取，并且返回给线程池？</li><li>动态伸缩</li><li>队列 异步写入 起到了解耦的作用</li><li>频繁的写入日志，可以采用线程池进行处理</li></ul></li><li>拿到一个配置文件 深入理解模块</li><li>conf文件 ngx.modules.c</li></ul>]]></content>
     
     
       
       
-    <summary type="html">&lt;h1 id=&quot;&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title=&quot; &quot;&gt;&lt;/a&gt; &lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;https://pic3.zhimg.com/v2-58d652598269710fa67ec8d1c88d8f03_r.jpg?s</summary>
+    <summary type="html">&lt;h1 id=&quot;&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;headerlink&quot; title=&quot; &quot;&gt;&lt;/a&gt; &lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/pic/nginx_icon.jpg&quot; alt=&quot;images&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;培养一套学习方法 整理一套完善的体系</summary>
       
     
     
